@@ -29,13 +29,12 @@ const masterRoom = {
 	//socketId:roomKey
 };
 
-io.on('connection', socket => {
+io.on('connect', socket => {
 	const shortId = socket.id.substr(0, 6);
 
 	console.log(`New client connected: ${shortId}`);
 
-	//Notify the client that it has connected to the server.
-	socket.emit('connected');
+	socket.emit('hello');
 
 	socket.on('createNewRoom', () => {
 		const key = createUniqueRoomKey(); //New room key
@@ -65,6 +64,7 @@ io.on('connection', socket => {
 	});
 
 	socket.on('createVehicle', data => {
+		console.log('createVehicle');
 		io.to(socketRooms[socket.id]).emit('master-createVehicle', data);
 	});
 

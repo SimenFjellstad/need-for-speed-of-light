@@ -49,12 +49,12 @@ function buildCSS(imageIndex) {
 }
 
 //TODO REMOVE
-var vehicleImages = [];
-for (var i = 0; i < vehicleImageNames.length; i++) {
-	var tempImage = new Image();
-	tempImage.src = vehiclePath + vehicleImageNames[i];
-	vehicleImages.push(tempImage);
-}
+// var vehicleImages = [];
+// for (var i = 0; i < vehicleImageNames.length; i++) {
+// 	var tempImage = new Image();
+// 	tempImage.src = vehiclePath + vehicleImageNames[i];
+// 	vehicleImages.push(tempImage);
+// }
 
 setTimeout(function() {
 	socket.emit('createVehicle', {player: socket.id, name: query.name});
@@ -75,18 +75,15 @@ joystick.addEventListener('touchEnd', function() {
 });
 
 setInterval(function() {
-	var x = -joystick.deltaX() * sensitivity;
-	var y = joystick.deltaY() * sensitivity;
-	var direction = Math.atan2(x, y);
-	var magnitude = Math.sqrt(Math.abs(x * x) + Math.abs(y * y));
-	if (magnitude > 180) magnitude = 180;
+	var x = (-joystick.deltaX() * sensitivity) / -500;
+	var y = (joystick.deltaY() * sensitivity) / -500;
 
 	if (ready) {
 		socket.emit('controls', {
 			player: socket.id,
 			name: query.name,
-			direction: direction,
-			magnitude: magnitude,
+			x: '' + x,
+			y: '' + y,
 		});
 	}
 }, 100);
