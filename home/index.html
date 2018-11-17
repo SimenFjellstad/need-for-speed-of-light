@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Parsec Race | Home</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="home.css">
+</head>
+
+<body>
+	<br>
+	<br>
+	<div class="wrapper">
+		<label class="half-width">
+			Name:
+			<input id="nameField" type="text" class="full-width" placeholder="NAME">
+		</label>
+		<label class="half-width">
+			Room:
+			<input id="roomField" type="text" class="full-width" placeholder="ROOM">
+		</label>
+		<button class="full-width" onClick="joinGame()">Join game</button>
+		</a>
+	</div>
+
+	<script>
+		function joinGame() {
+			var name = document.getElementById('nameField').value;
+			var room = document.getElementById('roomField').value;
+			var destination = window.location.origin + '/client';
+			destination += "?lazy=meh"
+			if (name) destination += ('&name=' + name)
+			if (room) destination += ('&room=' + room.toUpperCase())
+			location.href = destination;
+		}
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+html {
+	margin: 0;
+	min-height: 100%;
+	background-color: #2b2b2b;
+	background: linear-gradient(180deg, #00002a, #0a092f 50%, #978474);
+	font-family: sans-serif;
+}
+body {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	text-align: center;
+}
+.logo {
+	margin: 10px auto;
+	width: 90%;
+	max-width: 500px;
+}
+
+.wrapper {
+	color: white;
+	max-width: 500px;
+	padding: 1em;
+	margin: 0 auto;
+	text-align: center;
+	font-size: 0;
+}
+
+.start-game-title {
+	text-transform: uppercase;
+}
+
+label {
+	font-size: initial;
+	text-align: left;
+	display: block;
+	margin-top: 20px;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+}
+label:first-of-type {
+	padding-right: 10px;
+}
+label:last-of-type {
+	padding-left: 10px;
+}
+
+button,
+input[type='text'] {
+	padding: 1em;
+	border: 0;
+	font-size: 16px;
+	box-sizing: border-box;
+}
+button {
+	text-transform: uppercase;
+	color: white;
+	background-color: #0078a7;
+}
+button:hover {
+	background-color: #1088b7;
+	cursor: pointer;
+}
+
+.full-width {
+	width: 100%;
+}
+.half-width {
+	width: 50%;
+	display: inline-block;
+}
+
+@media screen and (max-width: 1300px) {
+	.hide-mobile {
+		display: none;
+	}
+}
