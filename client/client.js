@@ -5,6 +5,16 @@ var hasConnected = false;
 var socket = io();
 var query = getQueryParams(document.location.search);
 
+var w = window,
+	d = document,
+	e = d.documentElement,
+	g = d.getElementsByTagName('body')[0];
+
+var screenWidth = w.innerWidth || e.clientWidth || g.clientWidth,
+	screenHeight = w.innerHeight || e.clientHeight || g.clientHeight;
+
+var actionButton = false;
+
 onResize();
 
 socket.on('connected', function() {
@@ -27,10 +37,15 @@ socket.on('invalidRoom', function() {
 });
 
 socket.on('receive color', function(data) {
-	imageIndex = data.imageIndex;
+	var r = Math.round(data.r * 255);
+	var g = Math.round(data.g * 255);
+	var b = Math.round(data.b * 255);
 
-	var element = document.getElementById('container');
-	element.style = buildCSS(imageIndex);
+	var colorString = 'rgb(' + r + ',' + g + ',' + b + ')';
+
+	var element = document.getElementById('myButton');
+	element.style.backgroundColor = colorString;
+	// element.style = buildCSS(imageIndex);
 });
 
 socket.on('start game', function() {
@@ -38,15 +53,15 @@ socket.on('start game', function() {
 	audio.play();
 });
 
-function buildCSS(imageIndex) {
-	var path = vehiclePath + vehicleImageNames[imageIndex];
-	var string = 'background-size:180px;';
-	string += 'background-position:50% 70%;';
-	string += 'background-repeat:no-repeat;';
-	string += 'background-image:url("' + path + '");';
+// function buildCSS(imageIndex) {
+// 	var path = vehiclePath + vehicleImageNames[imageIndex];
+// 	var string = 'background-size:180px;';
+// 	string += 'background-position:50% 70%;';
+// 	string += 'background-repeat:no-repeat;';
+// 	string += 'background-image:url("' + path + '");';
 
-	return string;
-}
+// 	return string;
+// }
 
 //TODO REMOVE
 // var vehicleImages = [];
@@ -63,9 +78,24 @@ setTimeout(function() {
 	}, 500);
 }, 1000);
 
+var myButton = document.getElementById('myButton');
+myButton.addEventListener('touchstart', function(event) {
+	actionButton = true;
+});
+
+myButton.addEventListener('touchend', function(event) {
+	actionButton = false;
+});
+
+console.log(screenWidth, screenHeight);
+
+var container = document.getElementById('container');
 var joystick = new VirtualJoystick({
-	container: document.getElementById('container'),
+	container: container,
 	mouseSupport: true,
+	stationaryBase: true,
+	baseX: screenWidth / 2,
+	baseY: 200 + container.offsetTop,
 });
 joystick.addEventListener('touchStart', function() {
 	//console.log('down');
@@ -77,13 +107,13 @@ joystick.addEventListener('touchEnd', function() {
 setInterval(function() {
 	var x = (-joystick.deltaX() * sensitivity) / -500;
 	var y = (joystick.deltaY() * sensitivity) / -500;
-
 	if (ready) {
 		socket.emit('controls', {
 			player: socket.id,
 			name: query.name,
 			x: '' + x,
 			y: '' + y,
+			actionButton,
 		});
 	}
 }, 100);
@@ -91,12 +121,8 @@ setInterval(function() {
 window.addEventListener('resize', onResize);
 
 function onResize() {
-	var w = window,
-		d = document,
-		e = d.documentElement,
-		g = d.getElementsByTagName('body')[0],
-		screenWidth = w.innerWidth || e.clientWidth || g.clientWidth,
-		screenHeight = w.innerHeight || e.clientHeight || g.clientHeight;
+	screenWidth = w.innerWidth || e.clientWidth || g.clientWidth;
+	screenHeight = w.innerHeight || e.clientHeight || g.clientHeight;
 
 	var smallestDimension =
 		screenWidth < screenHeight ? screenWidth : screenHeight;

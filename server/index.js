@@ -73,9 +73,10 @@ io.on('connect', socket => {
 		console.log(`Game started in room ${socketRooms[socket.id]}`);
 	});
 
-	socket.on('send color', data => {
-		const player = io.to(data.socketid);
-		player.emit('receive color', {imageIndex: data.imageIndex});
+	socket.on('set-color', (socketId, r, g, b) => {
+		console.log('set-color', socketId, r, g, b);
+		const player = io.to(socketId);
+		player.emit('receive color', {r, g, b});
 	});
 
 	socket.on('disconnect', () => {
@@ -93,8 +94,8 @@ http.listen(PORT, () => {
 });
 
 const createUniqueRoomKey = () => {
-	const characters = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-	const length = 6;
+	const characters = 'ACDEFGJLMNPQRSTUVWXYZ2345679';
+	const length = 3;
 	let id;
 	do {
 		id = '';
